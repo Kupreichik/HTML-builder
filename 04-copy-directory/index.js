@@ -1,8 +1,10 @@
 const fs = require('fs');
 const path = require('path');
 
-let newDirPath = path.join(__dirname, 'files-copy');
-let dirPath = path.join(__dirname, 'files');
+let dirName = 'files';
+let copyDirName = dirName + '-copy';
+let newDirPath = path.join(__dirname, copyDirName);
+let dirPath = path.join(__dirname, dirName);
 
 function copyFiles(dirPath, newDirPath) {
   fs.readdir(dirPath, (err, files) => {
