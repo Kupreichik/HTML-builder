@@ -84,11 +84,18 @@ function createHtml(project, componentsDir) {
 
     async function htmlBuild() {
       let template = data.toString();
-      const componentsArr = template.match(/{{(.*)}}/gi);
-      for (let item of componentsArr) {
-        tag = item.replace(/[\{\}]/g, '').trim();
+      const componentsArr = template.match(/{{(.*)}}/gi).map(item => item.split('}{'));
+      const tags = [];
+
+      componentsArr.forEach(item => {
+        for( let i = 0; i < item.length; i++) {
+          tags.push(item[i].replace(/[\{\}]/g, '').trim());
+        }
+      })
+
+      for (let tag of tags) {
         const component = await fs.promises.readFile(path.join(componentsDir, `${tag}.html`));
-        template = template.replace(item, component.toString());
+        template = template.replace(`{{${tag}}}`, component.toString());
       }
       return template;
     }
